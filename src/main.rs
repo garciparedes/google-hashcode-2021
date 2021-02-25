@@ -102,11 +102,11 @@ impl Solver {
                 continue;
             }
 
-            streets.sort_unstable_by_key(|street| cmp::Reverse(street.expected_visits.iter().max()));
+            streets.sort_unstable_by_key(|street| street.expected_visits.iter().min());
             
             let mut incoming = Vec::new();
             for street in streets {
-                incoming.push((street.name.clone(), 1));
+                incoming.push((street.name.clone(), 5));
             }
 
             let intersection = Intersection::new(*intersection_id, incoming);
@@ -117,7 +117,7 @@ impl Solver {
         return solution;
     }
 }
-use std::cmp;
+
 #[derive(Debug)]
 struct Street {
     from: usize,
