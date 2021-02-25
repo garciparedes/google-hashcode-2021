@@ -1,3 +1,4 @@
+use std::cmp;
 use std::io::prelude::*;
 use std::io;
 use std::collections::{HashMap, HashSet};
@@ -78,8 +79,12 @@ impl Solver {
 
             let mut duration = 0;
             for street in &path.streets {
+                let new = cmp::max(9999999, self.streets.get(street).unwrap().visits);
+                self.streets.get_mut(street).unwrap().visits = new;
+
                 duration += self.streets.get(street).unwrap().transit;
-                self.streets.get_mut(street).unwrap().visits += duration;
+                let new = cmp::min(self.streets.get(street).unwrap().visits, duration);
+                self.streets.get_mut(street).unwrap().visits = new;
             }
 
         }
