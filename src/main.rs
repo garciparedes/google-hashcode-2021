@@ -1,4 +1,3 @@
-use std::cmp;
 use std::io::prelude::*;
 use std::io;
 use std::collections::{HashMap, HashSet};
@@ -77,9 +76,10 @@ impl Solver {
 
         for path in &self.paths {
 
-            //let mut duration = 0;
+            let mut duration = 0;
             for street in &path.streets {
-                //duration += self.streets.get(street).unwrap().transit;
+                duration += self.streets.get(street).unwrap().transit;
+                self.streets.get_mut(street).unwrap().score += duration;
                 self.streets.get_mut(street).unwrap().visits += 1;
             }
 
@@ -102,14 +102,14 @@ impl Solver {
                 continue;
             }
 
-            streets.sort_unstable_by_key(|street| (street.visits));
+            streets.sort_unstable_by_key(|street| (street.score / street.visits));
             
             let mut incoming = Vec::new();
             let mut cycle = 1;
-            let mut last = streets[0].visits;
+            let mut last = streets[0].score / streets[0].visits;
             for street in streets {
-                if last + 5 < street.visits {
-                    last = street.visits;
+                if last + 5 < street.score / street.visits {
+                    last = street.score / street.visits;
                     cycle += 1;
                 }
                 incoming.push((street.name.clone(), cycle));
@@ -132,6 +132,7 @@ struct Street {
     name: String,
     transit: usize,
     visits: usize,
+    score: usize,
 }
 
 impl Street {
@@ -146,7 +147,7 @@ impl Street {
     }
 
     fn new(from: usize, to: usize, name: String, transit: usize) -> Self {
-        Self { from: from, to: to, name: name, transit: transit, visits: 0}
+        Self { from: from, to: to, name: name, transit: transit, visits: 0, score: 0}
     }
 }
 
