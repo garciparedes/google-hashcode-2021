@@ -106,7 +106,7 @@ impl Solver {
             
             let mut incoming = Vec::new();
             for street in streets {
-                incoming.push((street.name.clone(), 5));
+                incoming.push((street.name.clone(), 2));
             }
 
             let intersection = Intersection::new(*intersection_id, incoming);
