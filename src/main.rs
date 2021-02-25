@@ -77,11 +77,10 @@ impl Solver {
 
         for path in &self.paths {
 
-            let mut duration = 0;
+            //let mut duration = 0;
             for street in &path.streets {
-                duration += self.streets.get(street).unwrap().transit;
-                let new = cmp::max(self.streets.get(street).unwrap().visits, duration);
-                self.streets.get_mut(street).unwrap().visits = new;
+                //duration += self.streets.get(street).unwrap().transit;
+                self.streets.get_mut(street).unwrap().visits += 1;
             }
 
         }
