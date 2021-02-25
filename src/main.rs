@@ -75,8 +75,11 @@ impl Solver {
 
 
         for path in &self.paths {
-            for (i, street) in path.streets.iter().enumerate() {
-                self.streets.get_mut(street).unwrap().visits += 1 + i;
+
+            let mut duration = 0;
+            for street in &path.streets {
+                duration += self.streets.get(street).unwrap().transit;
+                self.streets.get_mut(street).unwrap().visits += duration;
             }
 
         }
