@@ -82,22 +82,29 @@ impl Solver {
         }
 
         for (intersection_id, streets) in &self.graph {
-            let incoming: Vec<_> = streets
+            let mut streets: Vec<_> = streets
                 .iter()
                 .clone()
-                .map(|name| {
+                .filter_map(|name| {
                     let street = self.streets.get(name).unwrap();
                     if street.visits == 0 {
                         return None;
                     }
-                    return Some((name.clone(), 1));
+                    return Some(street);
                 })
-                .filter_map(|x| x)
                 .collect();
 
-            if incoming.is_empty() {
+            if streets.is_empty() {
                 continue;
             }
+
+            streets.sort_unstable_by_key(|street| street.visits);
+
+            let incoming: Vec<_> = streets
+                .into_iter()
+                .enumerate()
+                .map(|(i, street)| (street.name.clone(), i + 1))
+                .collect();
 
             let intersection = Intersection::new(*intersection_id, incoming);
             solution.insert(intersection);
