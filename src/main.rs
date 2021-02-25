@@ -108,7 +108,7 @@ impl Solver {
             let mut cycle = 1;
             let mut last = streets[0].visits;
             for street in streets {
-                if last < street.visits {
+                if last + 100 < street.visits {
                     last = street.visits;
                     cycle += 1;
                 }
