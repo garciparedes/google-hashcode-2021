@@ -102,7 +102,7 @@ impl Solver {
                 continue;
             }
 
-            streets.sort_unstable_by_key(|street| cmp::Reverse(street.visits));
+            streets.sort_unstable_by_key(|street| (street.visits));
             
             let mut incoming = Vec::new();
             let mut cycle = 1;
@@ -110,6 +110,7 @@ impl Solver {
                 incoming.push((street.name.clone(), cycle));
                 cycle += 1;
             }
+            incoming = incoming.into_iter().rev().collect();
 
             let intersection = Intersection::new(*intersection_id, incoming);
             solution.insert(intersection);
