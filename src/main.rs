@@ -106,11 +106,17 @@ impl Solver {
                 continue;
             }
 
-            streets.sort_unstable_by_key(|street| cmp::Reverse(street.visits));
+            streets.sort_unstable_by_key(|street| street.visits);
             
             let mut incoming = Vec::new();
+            let mut cycle = 1;
+            let mut last = streets[0].visits;
             for street in streets {
-                incoming.push((street.name.clone(), 1));
+                if last < street.visits {
+                    last = street.visits;
+                    cycle += 1;
+                }
+                incoming.push((street.name.clone(), cycle));
             }
 
             let intersection = Intersection::new(*intersection_id, incoming);
