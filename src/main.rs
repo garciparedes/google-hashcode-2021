@@ -98,15 +98,15 @@ impl Solver {
                 continue;
             }
 
-            streets.sort_unstable_by_key(|street| street.visits);
+            streets.sort_unstable_by_key(|street| street.transit);
             
             let mut incoming = Vec::new();
             let mut cycle = 1;
             let mut last = streets[0].visits;
             for street in streets {
-                if last < street.visits {
+                if last < street.transit {
                     cycle += 1;
-                    last = street.visits;
+                    last = street.transit;
                 }
                 incoming.push((street.name.clone(), cycle));
             }
