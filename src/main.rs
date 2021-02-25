@@ -7,7 +7,7 @@ fn main() -> io::Result<()> {
     let input = read_input()?;
 
     let solver = Solver::from_str(&input);
-    println!("{:?}", solver);
+    // println!("{:?}", solver);
     let solution = solver.solve();
 
     write_output(solution);
