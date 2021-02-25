@@ -110,7 +110,6 @@ impl Solver {
                     last = street.visits;
                 }
                 incoming.push((street.name.clone(), cycle));
-                cycle += 1;
             }
 
             let intersection = Intersection::new(*intersection_id, incoming);
