@@ -108,6 +108,7 @@ impl Solver {
             let mut cycle = 1;
             for street in streets {
                 incoming.push((street.name.clone(), cycle));
+                cycle += 1;
             }
 
             let intersection = Intersection::new(*intersection_id, incoming);
