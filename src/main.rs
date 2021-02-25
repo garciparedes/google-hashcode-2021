@@ -1,7 +1,6 @@
 use std::io::prelude::*;
 use std::io;
 use std::collections::{HashMap, HashSet};
-use std::cmp;
 
 
 fn main() -> io::Result<()> {
@@ -76,8 +75,8 @@ impl Solver {
 
 
         for path in &self.paths {
-            for street in &path.streets {
-                self.streets.get_mut(street).unwrap().visits += 1;
+            for (i, street) in path.streets.iter().enumerate() {
+                self.streets.get_mut(street).unwrap().visits += 1 + i;
             }
 
         }
