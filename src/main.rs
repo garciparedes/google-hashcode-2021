@@ -116,7 +116,7 @@ struct Path {
 impl Path {
 
     fn from_str(raw: &str) -> Self {
-        let values: Vec<String> = raw.trim().split_whitespace().map(String::from).collect();
+        let values: Vec<String> = raw.trim().split_whitespace().skip(1).map(String::from).collect();
         return Self::new(values);
     }
 
