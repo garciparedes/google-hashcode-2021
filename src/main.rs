@@ -102,11 +102,17 @@ impl Solver {
                 continue;
             }
 
-            streets.sort_unstable_by_key(|street| street.expected_visits.iter().max());
+            streets.sort_unstable_by_key(|street| street.transit);
             
             let mut incoming = Vec::new();
+            let mut cycle = 1;
+            let mut last = streets[0].transit;
             for street in streets {
-                incoming.push((street.name.clone(), 1));
+                if last < street.transit {
+                    last = street.transit;
+                    cycle += 1;
+                }
+                incoming.push((street.name.clone(), cycle));
             }
 
             let intersection = Intersection::new(*intersection_id, incoming);
