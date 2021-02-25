@@ -106,7 +106,7 @@ impl Solver {
                 continue;
             }
 
-            streets.sort_unstable_by_key(|street| street.visits);
+            streets.sort_unstable_by_key(|street| cmp::Reverse(street.visits));
             
             let mut incoming = Vec::new();
             for street in streets {
