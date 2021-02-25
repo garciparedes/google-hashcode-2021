@@ -90,7 +90,7 @@ impl Solver {
                     if street.visits == 0 {
                         return None;
                     }
-                    return Some((name.clone(), street.visits));
+                    return Some((name.clone(), 1));
                 })
                 .filter_map(|x| x)
                 .collect();
