@@ -79,7 +79,7 @@ impl Solver {
             let mut duration = 0;
             for street in &path.streets {
                 duration += self.streets.get(street).unwrap().transit;
-                self.streets.get_mut(street).unwrap().score += duration;
+                self.streets.get_mut(street).unwrap().expected_visits.push(duration);
                 self.streets.get_mut(street).unwrap().visits += 1;
             }
 
@@ -102,19 +102,12 @@ impl Solver {
                 continue;
             }
 
-            streets.sort_unstable_by_key(|street| (street.score / street.visits));
+            streets.sort_unstable_by_key(|street| street.expected_visits.iter().min());
             
             let mut incoming = Vec::new();
-            let mut cycle = 1;
-            let mut last = streets[0].score / streets[0].visits;
             for street in streets {
-                if last + 5 < street.score / street.visits {
-                    last = street.score / street.visits;
-                    cycle += 1;
-                }
-                incoming.push((street.name.clone(), cycle));
+                incoming.push((street.name.clone(), 1));
             }
-            incoming = incoming.into_iter().rev().collect();
 
             let intersection = Intersection::new(*intersection_id, incoming);
             solution.insert(intersection);
@@ -132,7 +125,7 @@ struct Street {
     name: String,
     transit: usize,
     visits: usize,
-    score: usize,
+    expected_visits: Vec<usize>,
 }
 
 impl Street {
@@ -147,7 +140,7 @@ impl Street {
     }
 
     fn new(from: usize, to: usize, name: String, transit: usize) -> Self {
-        Self { from: from, to: to, name: name, transit: transit, visits: 0, score: 0}
+        Self { from: from, to: to, name: name, transit: transit, visits: 0, expected_visits: Vec::new()}
     }
 }
 
