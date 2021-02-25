@@ -1,6 +1,7 @@
 use std::io::prelude::*;
 use std::io;
 use std::collections::{HashMap, HashSet};
+use std::cmp;
 
 
 fn main() -> io::Result<()> {
@@ -98,17 +99,20 @@ impl Solver {
                 continue;
             }
 
-            streets.sort_unstable_by_key(|street| street.transit);
+            streets.sort_unstable_by_key(|street| cmp::Reverse(street.transit));
             
             let mut incoming = Vec::new();
             let mut cycle = 1;
-            let mut last = streets[0].visits;
+            // let mut last = streets[0].visits;
             for street in streets {
+                /*
                 if last < street.transit {
                     cycle += 1;
                     last = street.transit;
                 }
+                */
                 incoming.push((street.name.clone(), cycle));
+                cycle += 1;
             }
 
             let intersection = Intersection::new(*intersection_id, incoming);
