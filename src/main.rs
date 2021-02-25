@@ -101,14 +101,8 @@ impl Solver {
             streets.sort_unstable_by_key(|street| street.visits);
             
             let mut incoming = Vec::new();
-            let mut cycle = 1;
-            let mut last = streets[0].visits;
             for street in streets {
-                if last < street.visits {
-                    cycle += 1;
-                    last = street.visits;
-                }
-                incoming.push((street.name.clone(), cycle));
+                incoming.push((street.name.clone(), 1));
             }
 
             let intersection = Intersection::new(*intersection_id, incoming);
