@@ -6,7 +6,7 @@ use std::collections::{HashMap, HashSet};
 fn main() -> io::Result<()> {
     let input = read_input()?;
 
-    let solver = Solver::from_str(&input);
+    let mut solver = Solver::from_str(&input);
     // println!("{:?}", solver);
     let solution = solver.solve();
 
@@ -70,11 +70,35 @@ impl Solver {
         }
     }
 
-    fn solve(&self) -> Solution {
+    fn solve(&mut self) -> Solution {
         let mut solution = Solution::new();
 
+
+        for path in &self.paths {
+            for street in &path.streets {
+                self.streets.get_mut(street).unwrap().visits += 1;
+            }
+
+        }
+
         for (intersection_id, streets) in &self.graph {
-            let incoming: Vec<_> = streets.iter().clone().map(|name| (name.clone(), 1)).collect();
+            let incoming: Vec<_> = streets
+                .iter()
+                .clone()
+                .map(|name| {
+                    let street = self.streets.get(name).unwrap();
+                    if street.visits == 0 {
+                        return None;
+                    }
+                    return Some((name.clone(), street.visits));
+                })
+                .filter_map(|x| x)
+                .collect();
+
+            if incoming.is_empty() {
+                continue;
+            }
+
             let intersection = Intersection::new(*intersection_id, incoming);
             solution.insert(intersection);
         }
@@ -90,6 +114,7 @@ struct Street {
     to: usize,
     name: String,
     transit: usize,
+    visits: usize,
 }
 
 impl Street {
@@ -104,7 +129,7 @@ impl Street {
     }
 
     fn new(from: usize, to: usize, name: String, transit: usize) -> Self {
-        Self { from: from, to: to, name: name, transit: transit }
+        Self { from: from, to: to, name: name, transit: transit, visits: 0}
     }
 }
 
