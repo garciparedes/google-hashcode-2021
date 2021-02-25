@@ -106,9 +106,13 @@ impl Solver {
             
             let mut incoming = Vec::new();
             let mut cycle = 1;
+            let mut last = streets[0].visits;
             for street in streets {
+                if last < street.visits {
+                    last = street.visits;
+                    cycle += 1;
+                }
                 incoming.push((street.name.clone(), cycle));
-                cycle += 1;
             }
             incoming = incoming.into_iter().rev().collect();
 
