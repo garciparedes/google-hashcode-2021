@@ -6,7 +6,7 @@ This repository contains our submitted solution for Google's HashCode 2021.
 
 ## How to run?
 ```bash
-# cargo run < input > output
+cargo run < input > output
 ```
 
 ## Authors
